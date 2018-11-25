@@ -1,23 +1,18 @@
-.menu ul {
-  display: none;
-  margin: 0;
+#test {
+  margin-top: 20px;
 }
 
-.menu .title {
-  font-weight: bold;
+.menu .title{
   cursor: pointer;
 }
 
-.menu .title:before {
+h4:before {
   content: '▶';
   padding-right: 6px;
   color: green;
 }
 
-.menu.open ul {
-  display: block;
-}
-
-.menu.open .title:before {
-  content: '▼';
+.hidden {
+  display: none;
+  /*content: '▼';*/
 }
