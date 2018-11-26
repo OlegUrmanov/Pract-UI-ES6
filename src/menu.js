@@ -1,35 +1,37 @@
-((d => {
-  function Menu(options) {
+(function(d){
+  class Menu {
+    constructor(options){
     this._element = options.element;
     this._title = options.title;
     this._items = options.items;
   }
+}
   Object.defineProperties(Menu.prototype, {
     'title': {
-      get() {
+      get: function() {
         return this._title;
       },
-      set(title) {
+      set: function(title) {
         this._title = title;
       }
     },
     'items': {
-      get() {
+      get: function() {
         return this._items;
       },
-      set(items) {
+      set: function(items) {
         this._items = items;
       }
     },
     'init': {
-      value() {
-        const title = d.createElement('h4');
-        const list = d.createElement('ul');
+      value: function() {
+        var title = d.createElement('h4'),
+            list = d.createElement('ul');
         list.className = 'menu';
         this._element.innerHTML = '';
         title.textContent = this._title;
         this._items.forEach(e => {
-          const item = d.createElement('li');
+          var item = d.createElement('li');
           item.textContent = e;
           list.appendChild(item);
         });
@@ -38,15 +40,15 @@
       }
     },
     'add': {
-      value(elem) {
+      value: function(elem) {
         this._items = this._items.concat(elem);
-        const item = d.createElement('li');
+        var item = d.createElement('li');
         item.textContent = elem;
         this._element.querySelector('.menu').appendChild(item);
       }
     },
     'remove': {
-      value() {
+      value: function () {
         if (this._element.querySelector('.menu').children.length){
           this._element.querySelector('.menu').children[this._element.querySelector('.menu').children.length-1].remove();
           this._items.pop();
@@ -54,37 +56,36 @@
       }
     },
     'toggle': {
-      value() {
+      value: function() {
         this._element.querySelector('.menu').classList.toggle('hidden');
       }
     },
     'open': {
-      value() {
+      value: function() {
         if (this._element.querySelector('.menu').classList.contains('hidden'))
           this._element.querySelector('.menu').classList.remove('hidden');
       }
     },
     'close': {
-      value() {
+      value: function() {
         if (!this._element.querySelector('.menu').classList.contains('hidden'))
           this._element.querySelector('.menu').classList.add('hidden');
       }
     },
   });
 
-  const menu = new Menu({
+  var menu = new Menu({
     element: d.getElementById('test'),
     title: 'Сладости',
     items: [
-      "Торт",
       "Пончик",
       "Пирожное",
       "Шоколадка",
-      "Мороженое",
+      "Мороженое"
     ]
   });
   menu.init();
-  d.body.addEventListener('click',e => {
+  d.body.addEventListener('click',function(e) {
     e.target.id === 'menu-toggle' ? menu.toggle() :
     e.target.id === 'menu-open' ? menu.open() :
     e.target.id === 'menu-close' ? menu.close() :
@@ -94,11 +95,4 @@
       (menu.add(d.getElementById('field-adding').value.trim()),
        d.getElementById('field-adding').value = '') : false;
   });
-
-  // console.log(menu);
-  // console.log(Object.entries(menu));
-  // console.log(Object.keys(menu));
-  // console.log(Object.getOwnPropertyNames(menu));
-  // console.log(Object.getOwnPropertySymbols(menu));
-  // console.log(Object.isExtensible(menu));
-}))(document);
+})(document);
