@@ -1,87 +1,72 @@
-((d=> {
-  class Menu {
-    constructor(options) {
-      this._element = options.element;
-      this._title = options.title;
-      this._items = options.items;
-    }
+class Menu {
+  constructor(options) {
+    this.options = options
+  }
 
-    get title() {
-      return this._title;
-    }
-    set title(title) {
-      this._title = title;
-    }
+  getElem() {
+    if (!this.elem) this.render();
+    return this.elem;
+  }
 
-    get items() {
-      return this._items;
-    }
-    set items(items) {
-      this._items = items;
-    }
+  render() {
+    this.elem = document.createElement("div");
+    this.elem.className = "menu";
 
-    init() {
-      const title = d.createElement('h4');
-      const list = d.createElement('ul');
-      list.className = 'menu';
-      this._element.innerHTML = '';
-      title.textContent = this._title;
-      this._items.forEach(e => {
-        const item = d.createElement('li');
-        item.textContent = e;
-        list.appendChild(item);
-      });
-      this._element.appendChild(title);
-      this._element.appendChild(list);
+    const titleElem = document.createElement("span");
+    this.elem.appendChild(titleElem);
+    titleElem.className = "title";
+    titleElem.textContent = this.options.title;
 
-    }
+    this.elem.onmousedown = () => false;
 
-    add(elem) {
-      this._items = this._items.concat(elem);
-      const item = d.createElement('li');
-      item.textContent = elem;
-      this._element.querySelector('.menu').appendChild(item);
-    }
-    remove() {
-      if (this._element.querySelector('.menu').children.length) {
-        this._element.querySelector('.menu').children[this._element.querySelector('.menu').children.length - 1].remove();
-        this._items.pop();
+    this.elem.onclick = event => {
+      if (event.target.closest(".title")) {
+        this.toggle();
       }
-    }
-    toggle() {
-      this._element.querySelector('.menu').classList.toggle('hidden');
-    }
-    open() {
-      if (this._element.querySelector('.menu').classList.contains('hidden'))
-        this._element.querySelector('.menu').classList.remove('hidden');
-    }
-
-    close() {
-      if (!this._element.querySelector('.menu').classList.contains('hidden'))
-        this._element.querySelector('.menu').classList.add('hidden');
     }
   }
 
-  const menu = new Menu({
-    element: d.getElementById('test'),
-    title: 'Сладости',
-    items: [
-      'Торт',
-      'Пончик',
-      'Пирожное',
-      'Шоколадка',
-      'Мороженое'
-    ]
-  });
-  menu.init();
-  d.body.addEventListener('click', e => {
-    e.target.id === 'menu-toggle' ? menu.toggle() :
-      e.target.id === 'menu-open' ? menu.open() :
-      e.target.id === 'menu-close' ? menu.close() :
-      e.target.id === 'remove-item' ? menu.remove() :
-      (e.target.id === 'add-item' &&
-        d.getElementById('field-adding').value.trim() !== '') ?
-      (menu.add(d.getElementById('field-adding').value.trim()),
-        d.getElementById('field-adding').value = '') : false;
-  })
-}))(document);
+  renderItems() {
+    const items = this.options.items || [];
+    const list = document.createElement("ul");
+    items.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+    this.elem.appendChild(list);
+  }
+
+  //------------ Не работает, а должно.----------
+
+  addItems() {
+    let a = document.getElementById('inputArea').value;
+    const items = a;
+    const li = document.createElement('li');
+    li.textContent = a;
+    this.elem.querySelector('ul').appendChild(li);
+  }
+
+  //-----------------------------------------------
+  remove() {
+    if (this.elem.querySelector('ul').children.length) {
+      this.elem.querySelector('ul').children[this.elem.querySelector('ul').children.length - 1].remove();
+    }
+  }
+
+  open() {
+    if (!this.elem.querySelector("ul")) {
+      this.renderItems();
+    }
+    this.elem.classList.add("open");
+  }
+
+  close() {
+    this.elem.classList.remove("open");
+  }
+
+  toggle() {
+    if (this.elem.classList.contains("open")) this.close();
+    else this.open();
+  }
+}

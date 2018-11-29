@@ -3,18 +3,30 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="styles/style.css">
+  <script src="dist/menu.js"></script>
 </head>
 
 <body>
-  <button id="menu-toggle">Menu toggle</button>
-  <button id="menu-open">Menu open</button>
-  <button id="menu-close">Menu close</button>
-  <button id="remove-item">Remove item</button>
-  <button id="add-item">Add item</button>
-  <input id="field-adding" type="text" />
-  <div id="test"></div>
+  <button onclick="menu.toggle()">menu.toggle()</button>
+  <button onclick="menu.open()">menu.open()</button>
+  <button onclick="menu.close()">menu.close()</button>
+  <button onclick="menu.remove()">menu.remove()</button>
+  <button onclick="menu.addItems()">menu.add()</button>
+  <input id="inputArea" type="text"></input>
 
-  <script src="dist/menu.js"></script>
+  <script>
+    var menu = new Menu({
+      title: 'Сладости',
+      items: [
+        "Пончик",
+        "Пирожное",
+        "Шоколадка",
+        "Мороженое"
+      ]
+    });
+    document.body.appendChild(menu.getElem());
+  </script>
+
 </body>
 
 </html>
